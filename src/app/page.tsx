@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,11 +27,14 @@ type JoinForm = {
   consent: boolean;
 };
 
-// Sett denne til true senere hvis/ når du lager API-rute /api/innmelding
-const USE_API = false;
+// Google Sheets API integration enabled
+const USE_API = true;
 
 export default function Page() {
-  const [open, setOpen] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loadingMembers, setLoadingMembers] = useState(true);
+  const [joinOpen, setJoinOpen] = useState(false);
+  
   const [form, setForm] = useState<JoinForm>({
     name: '',
     email: '',
@@ -41,14 +44,19 @@ export default function Page() {
     consent: false,
   });
 
-  // Midlertidig medlemsliste – byttes til API/CMS senere
-  const members: Member[] = [
-    { name: 'JProfessionals AS', type: 'Selskap', url: 'https://jpro.no' },
-    { name: 'Blank AS', type: 'Selskap', url: 'https://blank.no' },
-    { name: 'Compute AS', type: 'Selskap' },
-    { name: 'KodeKari (ENK)', type: 'Selvstendig' },
-    { name: 'DevOla (ENK)', type: 'Selvstendig' },
-  ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/medlemmer', { cache: 'no-store' });
+        const data = await res.json();
+        setMembers(Array.isArray(data.members) ? data.members : []);
+      } catch {
+        setMembers([]); // fallback
+      } finally {
+        setLoadingMembers(false);
+      }
+    })();
+  }, []);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -58,30 +66,38 @@ export default function Page() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    console.log("onSubmit v3 payload:", form); // <- markør
+  
     try {
       if (USE_API) {
-        const res = await fetch('/api/innmelding', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/innmelding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
         });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) throw new Error("HTTP " + res.status);
       } else {
-        // Demo: logg lokalt uten backend
-        console.log('Membership application (demo, not persisted):', form);
+        console.log("Membership application (demo, not persisted):", form);
       }
-      toast.success("Søknad sendt", { description: "Registrert lokalt (demo)." });
-      setOpen(false);
-      setForm({ name: '', email: '', company: '', role: '', notes: '', consent: false });
+  
+      toast.success("Søknad sendt ✅ v3", {
+        description: USE_API ? "Registrert i systemet." : "Registrert lokalt (demo).",
+      });
+  
+      // NB: riktig state-navn
+      setJoinOpen(false);
+  
+      setForm({ name: "", email: "", company: "", role: "", notes: "", consent: false });
     } catch (err) {
-      console.error('Feil i innmelding:', err);
-      toast({ title: 'Kunne ikke sende', description: 'Prøv igjen om litt.' });
+      console.error("Feil i innmelding:", err);
+      toast.error("Kunne ikke sende", { description: "Prøv igjen om litt." });
     }
   }
+  
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <SiteNav onOpenJoin={() => setOpen(true)} />
+      <SiteNav onOpenJoin={() => setJoinOpen(true)} />
 
       {/* Hero */}
       <section className="relative overflow-hidden">
@@ -102,14 +118,20 @@ export default function Page() {
               for bedre rammevilkår, kunnskapsdeling og høyere profesjonsstandard.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button size="lg" className="rounded-2xl px-6">
-                    Meld deg inn <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                <JoinDialogContent form={form} onChange={onChange} onSubmit={onSubmit} onClose={() => setOpen(false)} />
-              </Dialog>
+            // Hero CTA
+<Dialog open={joinOpen} onOpenChange={setJoinOpen}>
+  <DialogTrigger asChild>
+    <Button size="lg" className="rounded-2xl px-6">
+      Meld deg inn <ArrowRight className="ml-2 h-4 w-4" />
+    </Button>
+  </DialogTrigger>
+  <JoinDialogContent
+    form={form}
+    onChange={onChange}
+    onSubmit={onSubmit}
+    onClose={() => setJoinOpen(false)}
+  />
+</Dialog>
               <a href="#medlemskap" className="inline-flex">
                 <Button variant="outline" size="lg" className="rounded-2xl px-6">
                   Les om medlemskap
@@ -176,21 +198,21 @@ export default function Page() {
 
         {/* Medlemsoversikt */}
         <section id="medlemmer" className="mt-12 md:mt-16">
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <h3 className="text-2xl md:text-3xl font-semibold">Medlemmer</h3>
-            <span className="text-sm text-gray-600">{members.length} registrerte</span>
-          </div>
-          <p className="mt-3 text-gray-700 max-w-3xl">
-            Offentlig oversikt over virksomheter og selvstendige som er medlem i foreningen. Legg gjerne inn
-            firmanavn/lenke ved innmelding — listen oppdateres fortløpende.
-          </p>
+  <div className="flex items-center justify-between flex-wrap gap-3">
+    <h3 className="text-2xl md:text-3xl font-semibold">Medlemmer</h3>
+    <span className="text-sm text-gray-600">
+      {loadingMembers ? 'Laster…' : `${members.length} registrerte`}
+    </span>
+  </div>
 
-          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {members.map((m) => (
-              <MemberCard key={m.name} member={m} />
-            ))}
-          </div>
-        </section>
+  <p className="mt-3 text-gray-700 max-w-3xl">
+    Offentlig oversikt …
+  </p>
+
+  <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {!loadingMembers && members.map((m) => <MemberCard key={m.name} member={m} />)}
+  </div>
+</section>
       </section>
 
       {/* Membership */}
@@ -243,9 +265,9 @@ export default function Page() {
         </div>
 
         <div className="mt-8">
-          <Button size="lg" className="rounded-2xl" onClick={() => setOpen(true)}>
-            Meld deg inn
-          </Button>
+        <Button size="lg" className="rounded-2xl" onClick={() => setJoinOpen(true)}>
+  Meld deg inn
+</Button>
         </div>
       </section>
 
