@@ -118,7 +118,7 @@ export default function Page() {
               for bedre rammevilkår, kunnskapsdeling og høyere profesjonsstandard.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            // Hero CTA
+            
 <Dialog open={joinOpen} onOpenChange={setJoinOpen}>
   <DialogTrigger asChild>
     <Button size="lg" className="rounded-2xl px-6">
