@@ -175,9 +175,9 @@ function normalizeIncoming(raw: unknown): Row[] {
 
     return rows.slice(1).map((vals) => {
       const rec: Row = {};
+
       headers.forEach((h, i) => {
-        // @ts-expect-error index-tilgang OK her
-        rec[h] = vals?.[i];
+        rec[h] = (vals as unknown[])[i];
       });
       return rec;
     });
