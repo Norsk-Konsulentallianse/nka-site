@@ -1,8 +1,7 @@
 // src/app/page.tsx
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
-const MembersList = dynamic(() => import("@/components/MembersList"), { ssr: false });
+import MembersList from "@/components/MembersList";
 
 export default function HomePage() {
   // Konfigurerbar påmeldingslenke (sett i Vercel: NEXT_PUBLIC_SIGNUP_URL)
