@@ -1,7 +1,7 @@
 // src/app/page.tsx
 import Link from "next/link";
-
-import MembersList from "@/components/MembersList";
+import MembersList from "../components/MembersList";
+import SignupForm from "../components/SignupForm";
 
 export default function HomePage() {
   // Konfigurerbar påmeldingslenke (sett i Vercel: NEXT_PUBLIC_SIGNUP_URL)
@@ -59,70 +59,115 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* MEDLEMSKAP – vedtekter §4–5 */}
-      <section id="medlemskap" className="py-12 sm:py-16 bg-gray-50">
-        <div className="mx-auto max-w-4xl px-4">
-          <h2 className="text-2xl font-semibold">Medlemskap</h2>
-          <div className="mt-3 space-y-3 text-gray-800">
-            <p>
-              Medlemskap er åpent for virksomheter som har sitt hovedvirke innen konsulent- og rådgivningstjenester
-              knyttet til digitalisering, informasjonsteknologi og tilhørende forretnings- og organisasjonsutvikling,
-              samt virksomheter som tilrettelegger for slike tjenester. Medlemskapet er gyldig når kontingenten er
-              betalt. Styret kan avslå medlemskap dersom søker åpenbart bryter med Alliansens formål.
-            </p>
-            <p>
-              Årsmøtet fastsetter kontingenten årlig. <strong>For oppstartsåret 2025 er kontingenten satt til 5&nbsp;000 kroner</strong>,
-              vedtatt i stiftelsesmøtet 9. september 2025. Kontingenten gjelder frem til første ordinære årsmøte.
-            </p>
-          </div>
+{/* MEDLEMSKAP – vedtekter §4–5 */}
+<section id="medlemskap" className="py-12 sm:py-16 bg-gray-50">
+  <div className="mx-auto max-w-4xl px-4">
+    <h2 className="text-2xl font-semibold">Medlemskap</h2>
 
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full border text-sm">
-              <thead className="bg-white">
-                <tr>
-                  <th className="border px-3 py-2 text-left">Kategori</th>
-                  <th className="border px-3 py-2 text-left">Kontingent 2025</th>
-                  <th className="border px-3 py-2 text-left">Merknad</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                <tr>
-                  <td className="border px-3 py-2">Alle virksomheter</td>
-                  <td className="border px-3 py-2">5&nbsp;000 NOK</td>
-                  <td className="border px-3 py-2">Fastsettes av årsmøtet for kommende år</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    {/* Hva er medlemskap (knyttet til §4) */}
+    <div className="mt-3 space-y-3 text-gray-800">
+      <p>
+        Medlemskap er åpent for virksomheter som har sitt hovedvirke innen konsulent- og
+        rådgivningstjenester knyttet til digitalisering, informasjonsteknologi og tilhørende
+        forretnings- og organisasjonsutvikling, samt virksomheter som tilrettelegger for slike
+        tjenester. Medlemskapet er gyldig når kontingenten er betalt.
+      </p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Styret kan avslå medlemskap dersom søker åpenbart bryter med Alliansens formål.</li>
+        <li>Utmelding skjer skriftlig. Kontingent refunderes ikke.</li>
+        <li>Ved oppførsel i strid med formålet kan eksklusjon vedtas av styret med 2/3 flertall (med rett til å uttale seg før vedtak).</li>
+      </ul>
+      <p className="text-sm text-gray-600">Jf. vedtektene §4.</p>
+    </div>
 
-          <div className="mt-6">
-            <a
-              href={signupUrl}
-              className="rounded-lg border border-gray-900 px-4 py-2 text-sm font-semibold hover:bg-gray-900 hover:text-white"
-            >
-              Meld deg inn
-            </a>
-            <span className="ml-3 text-xs text-gray-600">
-              {process.env.NEXT_PUBLIC_SIGNUP_URL
-                ? "Åpner påmeldingsskjema."
-                : "Midlertidig mailto-lenke – sett NEXT_PUBLIC_SIGNUP_URL for skjema."}
-            </span>
-          </div>
+    {/* Hvorfor bli medlem – konkrete fordeler */}
+    <div className="mt-8 rounded-lg border bg-white p-4">
+      <h3 className="text-lg font-semibold">Hvorfor bli medlem?</h3>
+      <ul className="mt-2 list-disc pl-6 space-y-1 text-gray-800">
+        <li>Felles stemme i politiske prosesser og offentlige anskaffelser</li>
+        <li>Faglige møteplasser og erfaringsutveksling på tvers av miljøer</li>
+        <li>Tilgang til standarder, maler og kontrakter som reduserer friksjon</li>
+        <li>Profilering i medlemsoversikt og mulighet til å bidra i arbeids- og fagutvalg</li>
+      </ul>
+    </div>
 
-          <p className="mt-3 text-sm text-gray-600">Jf. vedtektene §4–5.</p>
-        </div>
-      </section>
+    {/* Pris og fakturering (2025) */}
+    <div className="mt-8">
+      <h3 className="text-lg font-semibold">Kontingent og fakturering</h3>
+      <p className="mt-2 text-gray-800">
+        Årsmøtet fastsetter kontingenten årlig. <strong>For oppstartsåret 2025 er kontingenten satt til 5&nbsp;000 kroner</strong>,
+        vedtatt i stiftelsesmøtet 9. september 2025. Kontingenten gjelder frem til første ordinære årsmøte.
+      </p>
+
+      <div className="mt-4 overflow-x-auto">
+        <table className="min-w-full border text-sm bg-white">
+          <thead>
+            <tr>
+              <th className="border px-3 py-2 text-left">Kategori</th>
+              <th className="border px-3 py-2 text-left">Kontingent 2025</th>
+              <th className="border px-3 py-2 text-left">Merknad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border px-3 py-2">Alle virksomheter</td>
+              <td className="border px-3 py-2">5&nbsp;000 NOK</td>
+              <td className="border px-3 py-2">Kontingent for kommende år fastsettes av årsmøtet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 text-xs text-gray-600">
+        Faktura sendes etter opptak/bekreftelse. Kontingent refunderes ikke ved utmelding (jf. vedtektene §4).
+      </p>
+    </div>
+
+    {/* Slik melder du deg inn – faktisk skjema som POSTer til /api/innmelding */}
+    <div className="mt-10">
+      <h3 className="text-lg font-semibold">Slik melder du deg inn</h3>
+      <ol className="mt-2 list-decimal pl-6 space-y-1 text-gray-800">
+        <li>Fyll ut skjemaet under med navn, e-post og (valgfritt) selskapsnavn.</li>
+        <li>Bekreft samtykke til behandling av opplysningene for å administrere medlemskapet.</li>
+        <li>Du får bekreftelse når innmeldingen er registrert; faktura utsendes for kontingent.</li>
+      </ol>
+
+      {/* Skjema-komponenten */}
+      <SignupForm />
+    </div>
+
+    {/* Personvern/Vilkår kort */}
+    <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="rounded-lg border bg-white p-4">
+        <h4 className="font-semibold">Personvern</h4>
+        <p className="mt-2 text-sm text-gray-800">
+          Opplysninger brukes kun til medlemsadministrasjon (innmelding, fakturering, medlemsoversikt) og lagres i
+          tråd med gjeldende regelverk. Du kan be om innsyn/sletting ved å kontakte oss.
+        </p>
+      </div>
+      <div className="rounded-lg border bg-white p-4">
+        <h4 className="font-semibold">Vilkår</h4>
+        <ul className="mt-2 list-disc pl-6 text-sm text-gray-800 space-y-1">
+          <li>Medlemskap kan avslås ved brudd på formål (§4).</li>
+          <li>Eksklusjon kan vedtas av styret med 2/3 flertall etter at medlemmet er hørt.</li>
+          <li>Utmelding skjer skriftlig. Kontingent refunderes ikke.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p className="mt-6 text-sm text-gray-600">Jf. vedtektene §4–5.</p>
+  </div>
+</section>
 
       {/* MEDLEMSLISTE – klientkomponent (henter /api/members eller publisert CSV) */}
       <section id="medlemmer" className="py-12 sm:py-16">
-        <div className="mx-auto max-w-4xl px-4">
-          <h2 className="text-2xl font-semibold">Medlemmer</h2>
-          <p className="mt-2 text-sm text-gray-600">Offentlig oversikt – synkronisert fra Google Sheets.</p>
-          <div className="mt-4">
-            <MembersList />
-          </div>
-        </div>
-      </section>
+  <div className="mx-auto max-w-4xl px-4">
+    <h2 className="text-2xl font-semibold">Medlemmer</h2>
+    <p className="mt-2 text-sm text-gray-600">Offentlig oversikt – synkronisert via innmeldingssystemet.</p>
+    <div className="mt-4">
+      <MembersList />
+    </div>
+  </div>
+</section>
 
       {/* ORGANISASJON – vedtekter §6–9 */}
       <section id="organisasjon" className="py-12 sm:py-16 bg-white">
