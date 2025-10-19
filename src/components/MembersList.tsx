@@ -18,7 +18,7 @@ type Member = {
 type ApiResponse = { members?: unknown };
 
 export default function MembersList() {
-  const [raw, setRaw] = useState<Row[]>([]);
+  const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,10 +30,11 @@ export default function MembersList() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json: ApiResponse = (await res.json().catch(() => ({}))) as ApiResponse;
 
-        const arr = Array.isArray(json?.members) ? (json.members as Row[]) : [];
-        const normalized = arr.map(normalizeKeysLowerTrim);
+        const raw = json?.members;
+        const normalizedRows = normalizeIncoming(raw);
+
         if (!cancelled) {
-          setRaw(normalized);
+          setRows(normalizedRows);
           setLoading(false);
         }
       } catch (e) {
@@ -49,22 +50,22 @@ export default function MembersList() {
     };
   }, []);
 
-  // Konverter til Member + normaliser boolsk felt
+  // map til Member og normaliser booleans + trim
   const members: Member[] = useMemo(() => {
-    return raw.map((r) => {
-      const m: Member = {
-        timestamp: strOrUndef(r["timestamp"]),
-        name: strOrUndef(r["name"]),
-        email: strOrUndef(r["email"]),
-        company: strOrUndef(r["company"]),
-        role: strOrUndef(r["role"]),
-        notes: strOrUndef(r["notes"]),
-        consent: toBool(r["consent"]),
-        verified: toBool(r["verified"]),
+    return rows.map((r) => {
+      const obj = lowerTrimKeys(r);
+      return {
+        timestamp: strOrUndef(obj["timestamp"]),
+        name: strOrUndef(obj["name"]),
+        email: strOrUndef(obj["email"]),
+        company: strOrUndef(obj["company"]),
+        role: strOrUndef(obj["role"]),
+        notes: strOrUndef(obj["notes"]),
+        consent: toBool(obj["consent"]),
+        verified: toBool(obj["verified"]),
       };
-      return m;
     });
-  }, [raw]);
+  }, [rows]);
 
   const totals = useMemo(() => {
     const total = members.length;
@@ -73,7 +74,6 @@ export default function MembersList() {
     return { total, consented, verified };
   }, [members]);
 
-  // vis kun de med consent==true og verified==true
   const visible = useMemo(() => {
     return members
       .filter((m) => m.consent === true && m.verified === true)
@@ -83,7 +83,6 @@ export default function MembersList() {
         if (ac && bc && ac !== bc) return ac.localeCompare(bc);
         if (!ac && bc) return 1;
         if (ac && !bc) return -1;
-
         const an = (a.name ?? "").toLowerCase();
         const bn = (b.name ?? "").toLowerCase();
         return an.localeCompare(bn);
@@ -95,7 +94,7 @@ export default function MembersList() {
 
   return (
     <>
-      {/* Diagnostikk uten å vise persondata */}
+      {/* Diagnostikk uten persondata */}
       <p className="mb-2 text-xs text-gray-600">
         Total: {totals.total} · Med samtykke: {totals.consented} · Verifisert: {totals.verified}
       </p>
@@ -103,8 +102,22 @@ export default function MembersList() {
       {visible.length === 0 ? (
         <div className="rounded border bg-white p-3 text-sm text-gray-700">
           Ingen bekreftede medlemmer er publisert enda.
-          <div className="mt-1 text-xs text-gray-600">
-            Tips: sett kolonnen <code>verified</code> = TRUE i regnearket for rader som skal publiseres.
+          <div className="mt-2 rounded bg-gray-50 p-2 text-xs text-gray-600">
+            <strong>Diagnostikk</strong> (maskert): Vi mottok {members.length} rad(er). Nøkler oppdaget:&nbsp;
+            {listAllKeys(rows).join(", ") || "ingen"}
+            <div className="mt-1">
+              Eksempel 1:&nbsp;
+              <code className="break-words">{maskRow(rows[0])}</code>
+            </div>
+            {rows[1] ? (
+              <div className="mt-1">
+                Eksempel 2:&nbsp;
+                <code className="break-words">{maskRow(rows[1])}</code>
+              </div>
+            ) : null}
+            <div className="mt-1">
+              Tips: sett <code>verified</code> = TRUE og <code>consent</code> = TRUE i datakilden (Apps Script/ark).
+            </div>
           </div>
         </div>
       ) : (
@@ -137,14 +150,56 @@ export default function MembersList() {
   );
 }
 
-/* ---------- hjelpere ---------- */
+/* ---------- normalisering & hjelpefunksjoner ---------- */
 
-// Normaliserer alle nøkler (lowercase + trim), slik at "Verified ", "VERIFIED" etc. blir "verified"
-function normalizeKeysLowerTrim(o: Row): Row {
+// Tar høyde for to formater fra API:
+// 1) array av objekter (key: value)
+// 2) array av arrays, der første rad er headere
+function normalizeIncoming(raw: unknown): Row[] {
+  if (!Array.isArray(raw)) return [];
+  if (raw.length === 0) return [];
+
+  // kasus: array av objekter
+  if (isArrayOfObjects(raw)) {
+    return (raw as Record<string, unknown>[]).map(lowerTrimKeys);
+  }
+
+  // kasus: array av arrays [headers, ...rows]
+  if (isArrayOfArrays(raw)) {
+    const rows = raw as unknown[][];
+    if (rows.length < 2) return [];
+    const headerRaw = rows[0] ?? [];
+    const headers = (headerRaw as unknown[])
+      .map((h) => (typeof h === "string" ? h : String(h ?? "")))
+      .map((h) => h.toLowerCase().trim());
+
+    return rows.slice(1).map((vals) => {
+      const rec: Row = {};
+      headers.forEach((h, i) => {
+        // @ts-expect-error index-tilgang OK her
+        rec[h] = vals?.[i];
+      });
+      return rec;
+    });
+  }
+
+  // ukjent format → prøv å stringify og gi tom liste
+  return [];
+}
+
+function isArrayOfObjects(a: unknown[]): boolean {
+  return a.every((x) => !!x && typeof x === "object" && !Array.isArray(x));
+}
+function isArrayOfArrays(a: unknown[]): boolean {
+  return a.every((x) => Array.isArray(x));
+}
+
+// lower+trim keys
+function lowerTrimKeys(o: Row): Row {
   const out: Row = {};
   Object.keys(o ?? {}).forEach((k) => {
     const nk = k.toLowerCase().trim();
-    const value = (o as Record<string, unknown>)[k]; // <- ikke 'any'
+    const value = (o as Record<string, unknown>)[k];
     out[nk] = value;
   });
   return out;
@@ -162,9 +217,35 @@ function toBool(v: unknown): boolean {
   if (typeof v === "number") return v === 1;
   if (typeof v === "string") {
     const s = v.trim().toLowerCase();
-    if (s === "true" || s === "1" || s === "ja" || s === "yes" || s === "y" || s === "x" || s === "✓") return true;
-    if (s === "paid" || s === "betalt") return true;
-    if (s === "false" || s === "0" || s === "nei" || s === "no" || s === "n") return false;
+    if (["true", "1", "ja", "yes", "y", "x", "✓", "paid", "betalt"].includes(s)) return true;
+    if (["false", "0", "nei", "no", "n"].includes(s)) return false;
   }
   return false;
+}
+
+// Samle alle nøkler vi har sett, til diagnostikk
+function listAllKeys(rs: Row[]): string[] {
+  const keys = new Set<string>();
+  rs.forEach((r) => Object.keys(r ?? {}).forEach((k) => keys.add(k)));
+  return [...keys].sort();
+}
+
+// Masker e-post og korter verdier for trygg visning
+function maskRow(r?: Row): string {
+  if (!r) return "{}";
+  const safe: Record<string, unknown> = {};
+  Object.entries(r).forEach(([k, v]) => {
+    if (k.toLowerCase().includes("email") && typeof v === "string") {
+      const at = v.indexOf("@");
+      if (at > 1) {
+        const masked = v.slice(0, Math.min(2, at)) + "…" + v.slice(at - 1);
+        safe[k] = masked;
+      } else {
+        safe[k] = "…@…";
+      }
+    } else {
+      safe[k] = v;
+    }
+  });
+  return JSON.stringify(safe);
 }
