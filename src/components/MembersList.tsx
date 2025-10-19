@@ -144,8 +144,8 @@ function normalizeKeysLowerTrim(o: Row): Row {
   const out: Row = {};
   Object.keys(o ?? {}).forEach((k) => {
     const nk = k.toLowerCase().trim();
-    // @ts-expect-error indeks-tilgang
-    out[nk] = (o as any)[k];
+    const value = (o as Record<string, unknown>)[k]; // <- ikke 'any'
+    out[nk] = value;
   });
   return out;
 }
