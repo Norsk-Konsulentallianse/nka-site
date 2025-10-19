@@ -17,13 +17,13 @@ export default function VedtekterPage() {
       <section className="prose prose-gray mt-8">
         <h2>§1 Navn</h2>
         <p>
-          Organisasjonens navn er <strong>Norsk Konsulentallianse</strong> ("Alliansen").
+          Organisasjonens navn er <strong>Norsk Konsulentallianse</strong> (&quot;Alliansen&quot;).
         </p>
 
         <h2>§2 Organisasjonsform</h2>
         <p>
-          Alliansen er en <strong>ideell, non-profit bransjeorganisasjon</strong>. Den har ikke økonomisk fortjeneste som
-          formål. Eventuelle overskudd skal tilbakeføres til virksomheten og formålet.
+          Alliansen er en <strong>ideell, non-profit bransjeorganisasjon</strong>. Den har ikke økonomisk fortjeneste som formål.
+          Eventuelle overskudd skal tilbakeføres til virksomheten og formålet.
         </p>
 
         <h2>§3 Formål</h2>
@@ -77,7 +77,10 @@ export default function VedtekterPage() {
           <li>Avholdes én gang i året innen utgangen av mai.</li>
           <li>Innkalles med minst 4 ukers varsel.</li>
           <li>Hver medlemsbedrift har én stemme.</li>
-          <li>Årsmøtet skal behandle: årsberetning, regnskap, kontingent, budsjett, valg av styre og valgkomité, innkomne forslag.</li>
+          <li>
+            Årsmøtet skal behandle: årsberetning, regnskap, kontingent, budsjett, valg av styre og valgkomité, innkomne
+            forslag.
+          </li>
         </ul>
 
         <h2>§8 Ekstraordinært årsmøte</h2>
@@ -124,7 +127,11 @@ export default function VedtekterPage() {
         </ul>
 
         <p className="mt-6 text-sm text-gray-600">
-          Har du spørsmål? <Link href="mailto:post@norskkonsulentallianse.no" className="underline">Kontakt oss</Link>.
+          Har du spørsmål?{" "}
+          <Link href="mailto:post@norskkonsulentallianse.no" className="underline">
+            Kontakt oss
+          </Link>
+          .
         </p>
       </section>
     </main>
