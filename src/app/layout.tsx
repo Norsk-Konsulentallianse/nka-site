@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import Footer from "@/components/Footer"; // juster path hvis du ikke bruker alias
+import Footer from "@/components/ui/footer"; // juster path hvis du ikke bruker alias
 
 export const metadata: Metadata = {
   title: "Norsk Konsulentallianse – Ideell bransjeorganisasjon",
