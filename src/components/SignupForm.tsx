@@ -26,8 +26,8 @@ export default function SignupForm() {
       });
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       setResult({ ok: !!json.ok, error: json.error });
-    } catch (err) {
-      setResult({ ok: false, error: "network_error" });
+    } catch {
+    setResult({ ok: false, error: "network_error" });
     } finally {
       setSubmitting(false);
     }
