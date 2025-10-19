@@ -5,10 +5,6 @@ import { useEffect, useState } from "react";
 
 type Member = Record<string, string>;
 
-/**
- * Viser medlemslisten fra API-ruten /api/innmelding/medlemmer.
- * Bruker fetch på klientsiden slik at listen oppdateres dynamisk.
- */
 export default function MembersList() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,15 +17,18 @@ export default function MembersList() {
       try {
         const res = await fetch("/api/innmelding/medlemmer", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        const arr: Member[] = Array.isArray(json?.members) ? json.members : [];
+        const json: unknown = await res.json();
+        const arr = Array.isArray((json as { members?: unknown })?.members)
+          ? ((json as { members: Member[] }).members)
+          : [];
         if (!cancelled) {
           setMembers(arr);
           setLoading(false);
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : String(e);
         if (!cancelled) {
-          setError(e?.message ?? "Kunne ikke laste medlemmer");
+          setError(message);
           setLoading(false);
         }
       }
