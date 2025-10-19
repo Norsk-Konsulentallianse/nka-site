@@ -15,7 +15,7 @@ export default function MembersList() {
 
     (async () => {
       try {
-        const res = await fetch("/api/innmelding/medlemmer", { cache: "no-store" });
+        const res = await fetch("/api/innmelding?fn=medlemmer", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json: unknown = await res.json();
         const arr = Array.isArray((json as { members?: unknown })?.members)
