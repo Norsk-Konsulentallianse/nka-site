@@ -72,11 +72,6 @@ export default function HomePage() {
         forretnings- og organisasjonsutvikling, samt virksomheter som tilrettelegger for slike
         tjenester. Medlemskapet er gyldig når kontingenten er betalt.
       </p>
-      <ul className="list-disc pl-6 space-y-1">
-        <li>Styret kan avslå medlemskap dersom søker åpenbart bryter med Alliansens formål.</li>
-        <li>Utmelding skjer skriftlig. Kontingent refunderes ikke.</li>
-        <li>Ved oppførsel i strid med formålet kan eksklusjon vedtas av styret med 2/3 flertall (med rett til å uttale seg før vedtak).</li>
-      </ul>
       <p className="text-sm text-gray-600">Jf. vedtektene §4.</p>
     </div>
 
@@ -126,7 +121,7 @@ export default function HomePage() {
     <div className="mt-10">
       <h3 className="text-lg font-semibold">Slik melder du deg inn</h3>
       <ol className="mt-2 list-decimal pl-6 space-y-1 text-gray-800">
-        <li>Fyll ut skjemaet under med navn, e-post og (valgfritt) selskapsnavn.</li>
+        <li>Fyll ut skjemaet under med navn, e-post og selskapsnavn.</li>
         <li>Bekreft samtykke til behandling av opplysningene for å administrere medlemskapet.</li>
         <li>Du får bekreftelse når innmeldingen er registrert; faktura utsendes for kontingent.</li>
       </ol>
@@ -143,14 +138,6 @@ export default function HomePage() {
           Opplysninger brukes kun til medlemsadministrasjon (innmelding, fakturering, medlemsoversikt) og lagres i
           tråd med gjeldende regelverk. Du kan be om innsyn/sletting ved å kontakte oss.
         </p>
-      </div>
-      <div className="rounded-lg border bg-white p-4">
-        <h4 className="font-semibold">Vilkår</h4>
-        <ul className="mt-2 list-disc pl-6 text-sm text-gray-800 space-y-1">
-          <li>Medlemskap kan avslås ved brudd på formål (§4).</li>
-          <li>Eksklusjon kan vedtas av styret med 2/3 flertall etter at medlemmet er hørt.</li>
-          <li>Utmelding skjer skriftlig. Kontingent refunderes ikke.</li>
-        </ul>
       </div>
     </div>
 
