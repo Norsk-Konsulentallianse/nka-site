@@ -25,6 +25,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
+    <html lang="no" className="scroll-smooth">
+      <body>{children}</body>
+    </html>
+  );
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
     <html lang="nb">
       <body className="antialiased">
         {/* Header/nav-komponenten din om du har en */}
