@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import Footer from "@/components/ui/footer"; // juster path hvis du ikke bruker alias
+import Footer from "@/components/ui/footer"; // juster sti om nødvendig
 
 export const metadata: Metadata = {
   title: "Norsk Konsulentallianse – Ideell bransjeorganisasjon",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Norsk Konsulentallianse",
     description:
       "Ideell, non-profit bransjeorganisasjon for virksomheter innen IT-konsulenttjenester og digitalisering.",
-    url: "https://nka-site.vercel.app",
+    url: "https://norskkonsulentallianse.no",
     siteName: "Norsk Konsulentallianse",
     type: "website",
   },
@@ -25,17 +25,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="no" className="scroll-smooth">
-      <body>{children}</body>
-    </html>
-  );
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="nb">
+    <html lang="nb" className="scroll-smooth">
       <body className="antialiased">
-        {/* Header/nav-komponenten din om du har en */}
         {children}
         <Footer />
       </body>
