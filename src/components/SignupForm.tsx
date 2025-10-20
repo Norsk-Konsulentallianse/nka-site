@@ -47,9 +47,10 @@ export default function SignupForm() {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium">Selskap (valgfritt)</label>
+        <label className="block text-sm font-medium">Selskap *</label>
         <input
           type="text"
+          required
           value={company}
           onChange={(e) => setCompany(e.target.value)}
           className="mt-1 w-full rounded border px-3 py-2"
