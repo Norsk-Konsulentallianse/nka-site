@@ -26,12 +26,13 @@ export default function HomePage() {
             tilhørende forretnings- og organisasjonsutvikling.
           </p>
           <div className="mt-6 flex gap-3">
-            <a
-              href={signupUrl}
-              className="rounded-lg border border-gray-900 px-4 py-2 text-sm font-semibold hover:bg-gray-900 hover:text-white"
-            >
+            
+          <a
+             href="#medlemskap"
+             className="rounded-lg border border-gray-900 px-4 py-2 text-sm font-semibold hover:bg-gray-900 hover:text-white"
+          >
               Meld deg inn
-            </a>
+          </a>
             <Link href="/vedtekter" className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50">
               Vedtekter
             </Link>
