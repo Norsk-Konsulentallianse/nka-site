@@ -19,7 +19,7 @@ export function MedlemskapSection() {
         </div>
 
         {/* Two Cards Grid */}
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div className="relative z-10 mt-10 grid gap-6 md:grid-cols-2 pb-32 sm:pb-40 lg:pb-48">
           {/* Card 1: Hvorfor bli medlem */}
           <div className="rounded-[20px] bg-white p-6 sm:p-8">
             <h3 className="text-xl font-bold">Hvorfor bli medlem?</h3>
@@ -92,19 +92,21 @@ export function MedlemskapSection() {
             </p>
           </div>
         </div>
+      </div>
 
-        {/* Full-width Image */}
-        <div className="relative mt-10 h-64 sm:h-80 lg:h-96 w-full overflow-hidden rounded-[20px]">
-          <Image
-            src="/NKA_Bilde2_1920.jpg"
-            alt="Kontormiljø"
-            fill
-            className="object-cover"
-          />
-        </div>
+      {/* Full-width Image - overlapping with cards above */}
+      <div className="relative -mt-24 sm:-mt-32 lg:-mt-40 h-64 sm:h-80 lg:h-96 w-full">
+        <Image
+          src="/NKA_Bilde2_1920.jpg"
+          alt="Kontormiljø"
+          fill
+          className="object-cover"
+        />
+      </div>
 
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-10 sm:pt-16">
         {/* Signup Section */}
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           {/* Left: Instructions */}
           <div>
             <h2 className="text-3xl font-bold text-white">Slik melder du deg inn.</h2>
