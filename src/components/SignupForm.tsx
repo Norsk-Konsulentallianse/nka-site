@@ -34,46 +34,46 @@ export default function SignupForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-6 grid gap-3 max-w-xl">
+    <form onSubmit={onSubmit} className="grid gap-4">
       <div>
-        <label className="block text-sm font-medium">Navn *</label>
+        <label className="block text-sm font-medium text-gray-700">Navn *</label>
         <input
           type="text"
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded border px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none"
           placeholder="Ola Nordmann"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium">Selskap *</label>
+        <label className="block text-sm font-medium text-gray-700">Selskap *</label>
         <input
           type="text"
           required
           value={company}
           onChange={(e) => setCompany(e.target.value)}
-          className="mt-1 w-full rounded border px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none"
           placeholder="Firmanavn AS"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium">E-post *</label>
+        <label className="block text-sm font-medium text-gray-700">E-post *</label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded border px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none"
           placeholder="ola@example.no"
         />
       </div>
-      <label className="flex items-start gap-2 text-sm">
+      <label className="flex items-start gap-3 text-sm text-gray-700">
         <input
           type="checkbox"
           checked={consent}
           onChange={(e) => setConsent(e.target.checked)}
-          className="mt-1"
+          className="mt-1 h-4 w-4 rounded border-gray-300"
           required
         />
         <span>
@@ -81,11 +81,11 @@ export default function SignupForm() {
         </span>
       </label>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg border border-gray-900 px-4 py-2 text-sm font-semibold hover:bg-gray-900 hover:text-white disabled:opacity-60"
+          className="rounded-full bg-gray-900 px-8 py-3 text-sm font-semibold text-white uppercase tracking-wider hover:bg-gray-800 disabled:opacity-60 transition-colors"
         >
           {submitting ? "Sender…" : "Meld deg inn"}
         </button>
@@ -96,7 +96,7 @@ export default function SignupForm() {
         )}
       </div>
 
-      <p className="text-xs text-gray-600">
+      <p className="text-xs text-gray-500">
         Felt merket med * er påkrevd. Du kan når som helst be om innsyn eller sletting.
       </p>
     </form>

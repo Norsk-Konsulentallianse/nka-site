@@ -1,7 +1,21 @@
 // app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import Footer from "@/components/ui/footer"; // juster sti om nødvendig
+import { Nunito_Sans, Manrope } from "next/font/google";
+import Footer from "@/components/ui/footer";
+
+const nunitoSans = Nunito_Sans({
+  subsets: ["latin"],
+  variable: "--font-nunito-sans",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+  weight: ["500", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Norsk Konsulentallianse – Ideell bransjeorganisasjon",
@@ -25,8 +39,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nb" className="scroll-smooth">
-      <body className="antialiased">
+    <html lang="nb" className={`${nunitoSans.variable} ${manrope.variable} scroll-smooth`}>
+      <body className="font-sans antialiased">
         {children}
         <Footer />
       </body>
