@@ -38,17 +38,35 @@ export async function GET(req: Request) {
 
     // Håndter presseoppslag
     if (fn === "presseoppslag") {
-      const upstream = await fetch(`${base}?fn=presseoppslag&key=${encodeURIComponent(key)}`);
+      const upstreamUrl = `${base}?fn=presseoppslag&key=${encodeURIComponent(key)}`;
+      console.log("[presseoppslag] Fetching from Apps Script...");
+
+      const upstream = await fetch(upstreamUrl);
+      console.log("[presseoppslag] Upstream status:", upstream.status);
+
       if (!upstream.ok) {
-        console.error("presseoppslag-upstream-status:", upstream.status);
+        console.error("[presseoppslag] Upstream failed:", upstream.status);
         return NextResponse.json({ presseoppslag: [] }, { status: 200 });
       }
 
-      const json: unknown = await upstream.json().catch(() => ({}));
+      const rawText = await upstream.text();
+      console.log("[presseoppslag] Raw response:", rawText.substring(0, 500));
+
+      let json: unknown;
+      try {
+        json = JSON.parse(rawText);
+      } catch {
+        console.error("[presseoppslag] JSON parse failed");
+        return NextResponse.json({ presseoppslag: [] }, { status: 200 });
+      }
+
+      console.log("[presseoppslag] Parsed JSON keys:", Object.keys(json as object));
+
       const presseoppslag = Array.isArray((json as { presseoppslag?: unknown })?.presseoppslag)
         ? ((json as { presseoppslag: Record<string, string>[] }).presseoppslag)
         : [];
 
+      console.log("[presseoppslag] Returning", presseoppslag.length, "items");
       return NextResponse.json({ presseoppslag });
     }
 
