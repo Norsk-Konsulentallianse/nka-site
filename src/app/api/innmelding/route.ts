@@ -3,40 +3,59 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 /**
- * GET /api/innmelding?fn=medlemmer
- * Proxier til Apps Script for å hente medlemmer.
+ * GET /api/innmelding?fn=medlemmer|presseoppslag
+ * Proxier til Apps Script for å hente data.
  */
 export async function GET(req: Request) {
   try {
     const urlObj = new URL(req.url);
     const fn = urlObj.searchParams.get("fn");
 
-    if (fn !== "medlemmer") {
-      return NextResponse.json({ ok: false, error: "unknown_fn" }, { status: 400 });
-    }
-
     const base = process.env.APP_SCRIPT_URL!;
     const key  = process.env.APP_SCRIPT_SECRET!;
     if (!base || !key) {
       console.error("ENV mangler: APP_SCRIPT_URL/APP_SCRIPT_SECRET");
-      return NextResponse.json({ members: [] }, { status: 200 });
+      if (fn === "medlemmer") return NextResponse.json({ members: [] }, { status: 200 });
+      if (fn === "presseoppslag") return NextResponse.json({ presseoppslag: [] }, { status: 200 });
+      return NextResponse.json({ ok: false, error: "unknown_fn" }, { status: 400 });
     }
 
-    const upstream = await fetch(`${base}?fn=medlemmer&key=${encodeURIComponent(key)}`);
-    if (!upstream.ok) {
-      console.error("medlemmer-upstream-status:", upstream.status);
-      return NextResponse.json({ members: [] }, { status: 200 });
+    // Håndter medlemmer
+    if (fn === "medlemmer") {
+      const upstream = await fetch(`${base}?fn=medlemmer&key=${encodeURIComponent(key)}`);
+      if (!upstream.ok) {
+        console.error("medlemmer-upstream-status:", upstream.status);
+        return NextResponse.json({ members: [] }, { status: 200 });
+      }
+
+      const json: unknown = await upstream.json().catch(() => ({}));
+      const members = Array.isArray((json as { members?: unknown })?.members)
+        ? ((json as { members: Record<string, string>[] }).members)
+        : [];
+
+      return NextResponse.json({ members });
     }
 
-    const json: unknown = await upstream.json().catch(() => ({}));
-    const members = Array.isArray((json as { members?: unknown })?.members)
-      ? ((json as { members: Record<string, string>[] }).members)
-      : [];
+    // Håndter presseoppslag
+    if (fn === "presseoppslag") {
+      const upstream = await fetch(`${base}?fn=presseoppslag&key=${encodeURIComponent(key)}`);
+      if (!upstream.ok) {
+        console.error("presseoppslag-upstream-status:", upstream.status);
+        return NextResponse.json({ presseoppslag: [] }, { status: 200 });
+      }
 
-    return NextResponse.json({ members });
+      const json: unknown = await upstream.json().catch(() => ({}));
+      const presseoppslag = Array.isArray((json as { presseoppslag?: unknown })?.presseoppslag)
+        ? ((json as { presseoppslag: Record<string, string>[] }).presseoppslag)
+        : [];
+
+      return NextResponse.json({ presseoppslag });
+    }
+
+    return NextResponse.json({ ok: false, error: "unknown_fn" }, { status: 400 });
   } catch (e) {
-    console.error("medlemmer-proxy-feil:", e);
-    return NextResponse.json({ members: [] }, { status: 200 });
+    console.error("proxy-feil:", e);
+    return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
   }
 }
 
