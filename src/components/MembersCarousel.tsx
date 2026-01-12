@@ -136,19 +136,19 @@ export function MembersCarousel() {
       )}
 
       {/* Carousel Track */}
-      <div className="overflow-hidden px-2">
+      <div className="overflow-hidden">
         <motion.div
-          className="flex gap-6"
+          className="flex"
           animate={{
-            x: `-${currentIndex * (100 / itemsPerView + 2)}%`,
+            x: `-${currentIndex * (100 / itemsPerView)}%`,
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {members.map((member, i) => (
             <div
               key={`${member.company}-${i}`}
-              className="flex-shrink-0"
-              style={{ width: `calc(${100 / itemsPerView}% - 1.5rem)` }}
+              className="flex-shrink-0 px-3"
+              style={{ width: `${100 / itemsPerView}%` }}
             >
               <div className="flex h-48 flex-col items-center justify-center rounded-[20px] bg-[#f7f6f5] p-6 text-center">
                 <h3 className="text-lg font-semibold text-gray-900">
