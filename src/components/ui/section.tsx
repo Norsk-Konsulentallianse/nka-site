@@ -27,7 +27,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("py-16 sm:py-24", themeClasses[theme], className)}
+      className={cn("py-12 sm:py-16", themeClasses[theme], className)}
     >
       {fullBleed ? (
         children
