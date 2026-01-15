@@ -2,9 +2,12 @@
 import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
+// Cache data for 5 minutes (300 seconds)
+const CACHE_SECONDS = 300;
+
 /**
  * GET /api/innmelding?fn=medlemmer|presseoppslag
- * Proxier til Apps Script for å hente data.
+ * Proxier til Apps Script for å hente data med caching.
  */
 export async function GET(req: Request) {
   try {
@@ -22,7 +25,9 @@ export async function GET(req: Request) {
 
     // Håndter medlemmer
     if (fn === "medlemmer") {
-      const upstream = await fetch(`${base}?fn=medlemmer&key=${encodeURIComponent(key)}`);
+      const upstream = await fetch(`${base}?fn=medlemmer&key=${encodeURIComponent(key)}`, {
+        next: { revalidate: CACHE_SECONDS },
+      });
       if (!upstream.ok) {
         console.error("medlemmer-upstream-status:", upstream.status);
         return NextResponse.json({ members: [] }, { status: 200 });
@@ -33,41 +38,34 @@ export async function GET(req: Request) {
         ? ((json as { members: Record<string, string>[] }).members)
         : [];
 
-      return NextResponse.json({ members });
+      return NextResponse.json({ members }, {
+        headers: {
+          "Cache-Control": `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${CACHE_SECONDS * 2}`,
+        },
+      });
     }
 
     // Håndter presseoppslag
     if (fn === "presseoppslag") {
-      const upstreamUrl = `${base}?fn=presseoppslag&key=${encodeURIComponent(key)}`;
-      console.log("[presseoppslag] Fetching from Apps Script...");
-
-      const upstream = await fetch(upstreamUrl);
-      console.log("[presseoppslag] Upstream status:", upstream.status);
+      const upstream = await fetch(`${base}?fn=presseoppslag&key=${encodeURIComponent(key)}`, {
+        next: { revalidate: CACHE_SECONDS },
+      });
 
       if (!upstream.ok) {
-        console.error("[presseoppslag] Upstream failed:", upstream.status);
+        console.error("presseoppslag-upstream-status:", upstream.status);
         return NextResponse.json({ presseoppslag: [] }, { status: 200 });
       }
 
-      const rawText = await upstream.text();
-      console.log("[presseoppslag] Raw response:", rawText.substring(0, 500));
-
-      let json: unknown;
-      try {
-        json = JSON.parse(rawText);
-      } catch {
-        console.error("[presseoppslag] JSON parse failed");
-        return NextResponse.json({ presseoppslag: [] }, { status: 200 });
-      }
-
-      console.log("[presseoppslag] Parsed JSON keys:", Object.keys(json as object));
-
+      const json: unknown = await upstream.json().catch(() => ({}));
       const presseoppslag = Array.isArray((json as { presseoppslag?: unknown })?.presseoppslag)
         ? ((json as { presseoppslag: Record<string, string>[] }).presseoppslag)
         : [];
 
-      console.log("[presseoppslag] Returning", presseoppslag.length, "items");
-      return NextResponse.json({ presseoppslag });
+      return NextResponse.json({ presseoppslag }, {
+        headers: {
+          "Cache-Control": `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${CACHE_SECONDS * 2}`,
+        },
+      });
     }
 
     return NextResponse.json({ ok: false, error: "unknown_fn" }, { status: 400 });

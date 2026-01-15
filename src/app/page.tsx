@@ -8,15 +8,25 @@ import { MedlemsfordelerSection } from "@/components/sections/MedlemsfordelerSec
 import { DokumenterSection } from "@/components/sections/DokumenterSection";
 import { OrganisasjonSection } from "@/components/sections/OrganisasjonSection";
 import { KontaktSection } from "@/components/sections/KontaktSection";
+import { getMembers, getPressItems } from "@/lib/data";
 
-export default function HomePage() {
+// Revalidate page every 5 minutes
+export const revalidate = 300;
+
+export default async function HomePage() {
+  // Fetch data server-side in parallel
+  const [members, pressItems] = await Promise.all([
+    getMembers(),
+    getPressItems(),
+  ]);
+
   return (
     <main className="min-h-screen">
       <HeroSection />
       <FormalSection />
       <MedlemskapSection />
-      <MedlemmerSection />
-      <PresseSection />
+      <MedlemmerSection members={members} />
+      <PresseSection items={pressItems} />
       <MedlemsfordelerSection />
       <DokumenterSection />
       <OrganisasjonSection />
