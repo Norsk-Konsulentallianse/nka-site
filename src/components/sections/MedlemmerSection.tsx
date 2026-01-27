@@ -11,7 +11,7 @@ export function MedlemmerSection({ members }: MedlemmerSectionProps) {
     <Section id="medlemmer" theme="white" className="overflow-hidden">
       <h2 className="text-3xl font-bold">Medlemmer.</h2>
       <p className="mt-2 text-gray-600">
-        Offentlig oversikt – synkronisert via innmeldingssystemet.
+        {members.length} medlemsbedrifter – synkronisert via innmeldingssystemet.
       </p>
       <div className="mt-8">
         {members.length === 0 ? (

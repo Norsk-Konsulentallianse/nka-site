@@ -110,7 +110,7 @@ export function MembersCarousel({ members }: MembersCarouselProps) {
             <ChevronLeft className="h-5 w-5" />
           </button>
           <span className="text-sm text-gray-600">
-            {currentIndex + 1} / {maxIndex + 1}
+            Side {currentIndex + 1} av {maxIndex + 1}
           </span>
           <button
             onClick={next}
