@@ -1,15 +1,11 @@
+import { NkaLogo } from "@/components/NkaLogo";
+
 export default function Footer() {
   return (
     <footer className="bg-[#f0f0f0] border-t border-gray-200">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="text-lg font-bold text-gray-900">
-              Norsk
-              <br />
-              Konsulentallianse
-            </p>
-          </div>
+          <NkaLogo size="sm" variant="dark" link />
           <div className="text-sm text-gray-600">
             <a href="/vedtekter" className="hover:underline">
               Vedtekter

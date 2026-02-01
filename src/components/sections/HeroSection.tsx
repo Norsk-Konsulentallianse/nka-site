@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { NkaLogo } from "@/components/NkaLogo";
 
 export function HeroSection() {
   return (
@@ -19,8 +20,9 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
-          Norsk Konsulentallianse
+        <h1>
+          <NkaLogo size="xl" variant="light" layout="stacked" />
+          <span className="sr-only">Norsk Konsulentallianse</span>
         </h1>
         <p className="mt-6 text-lg sm:text-xl max-w-2xl mx-auto opacity-90">
           er en <strong>ideell, non-profit bransjeorganisasjon</strong> for

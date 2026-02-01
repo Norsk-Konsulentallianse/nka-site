@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import { Nunito_Sans, Manrope } from "next/font/google";
+import { Nunito_Sans, Manrope, Source_Sans_3 } from "next/font/google";
 import Footer from "@/components/ui/footer";
 
 const nunitoSans = Nunito_Sans({
@@ -15,6 +15,13 @@ const manrope = Manrope({
   variable: "--font-manrope",
   display: "swap",
   weight: ["500", "700"],
+});
+
+const sourceSans3 = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
@@ -39,7 +46,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nb" className={`${nunitoSans.variable} ${manrope.variable} scroll-smooth`}>
+    <html lang="nb" className={`${nunitoSans.variable} ${manrope.variable} ${sourceSans3.variable} scroll-smooth`}>
       <body className="font-sans antialiased">
         {children}
         <Footer />

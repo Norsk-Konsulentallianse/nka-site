@@ -1,6 +1,7 @@
 // src/app/vedtekter/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
+import { NkaLogo } from "@/components/NkaLogo";
 
 export const metadata: Metadata = {
   title: "Vedtekter – Norsk Konsulentallianse",
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
 export default function VedtekterPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
+      <nav className="mb-8">
+        <NkaLogo size="sm" variant="dark" link />
+      </nav>
       <header className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Vedtekter for Norsk Konsulentallianse</h1>
         <p className="mt-2 text-sm text-gray-600">Vedtatt ved stiftelse 9. september 2025.</p>
