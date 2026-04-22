@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import { HeroSection } from "@/components/sections/HeroSection";
+import { ArrangementSection } from "@/components/sections/ArrangementSection";
 import { FormalSection } from "@/components/sections/FormalSection";
 import { MedlemskapSection } from "@/components/sections/MedlemskapSection";
 import { MedlemmerSection } from "@/components/sections/MedlemmerSection";
@@ -23,6 +24,7 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       <HeroSection />
+      <ArrangementSection />
       <FormalSection />
       <MedlemskapSection />
       <MedlemmerSection members={members} />
