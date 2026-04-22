@@ -35,7 +35,7 @@ const innledere = [
   {
     navn: "Steinar Hansen",
     rolle: "Daglig leder JPro AS, nestleder NKA",
-    bio: "Daglig leder i konsulentselskapet JPro AS og nestleder i Norsk Konsulentallianse. Ferdig utdannet i 1995 og har jobbet i IT-bransjen siden.",
+    bio: "Daglig leder i konsulentselskapet JPro AS og nestleder i Norsk Konsulentallianse. 25+ års erfaring fra IT-bransjen.",
   },
   {
     navn: "Stephan Brostrøm",
