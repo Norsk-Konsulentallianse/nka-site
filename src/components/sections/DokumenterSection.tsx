@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 
 const dokumenter = [
   {
-    title: "Veileder: Innleieregler",
+    title: "Veileder: Lovlig innkjøp av IT-konsulenttjenester",
     description:
-      "Praktisk guide for konsulentselskaper om hvordan forholde seg til de nye innleiereglene.",
-    filename: "innleieveileder.pdf",
+      "Praktisk guide for konsulentselskaper om hvordan forholde seg til innleiereglene ved innkjøp av IT-konsulenttjenester.",
+    filename: "Veileder – Lovlig Innkjøp av IT-konsulenttjenester.pdf",
     date: "2025-01-01",
   },
   // Legg til flere dokumenter her etter hvert
