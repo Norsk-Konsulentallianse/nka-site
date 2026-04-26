@@ -8,7 +8,7 @@ const dokumenter = [
     description:
       "Praktisk guide for konsulentselskaper om hvordan forholde seg til innleiereglene ved innkjøp av IT-konsulenttjenester.",
     filename: "Veileder – Lovlig Innkjøp av IT-konsulenttjenester.pdf",
-    date: "2025-01-01",
+    date: "2026-04-24",
   },
   // Legg til flere dokumenter her etter hvert
 ];
