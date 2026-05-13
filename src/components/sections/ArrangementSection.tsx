@@ -26,7 +26,10 @@ const program = [
       "Øystein Bjering (Appfarm) — Vibe coding: hvorfor så mange løsninger aldri når produksjon, og hvordan ta ut hastighetsgevinsten uten å miste kontrollen",
   },
   { tid: "17:10", tekst: "Pause" },
-  { tid: "17:20", tekst: "Paneldebatt" },
+  {
+    tid: "17:20",
+    tekst: "Paneldebatt, ledet av Kari Bjørkelund (AdviseTech)",
+  },
   { tid: "18:00", tekst: "Mingling og lett servering" },
   { tid: "18:30", tekst: "Slutt" },
 ];
@@ -46,6 +49,14 @@ const innledere = [
     navn: "Øystein Bjering",
     rolle: "Appfarm",
     bio: "Ansvarlig for Appfarms internasjonale partnernettverk, utdannet ved NTNU med 15+ års erfaring fra no-code, ledelse og IT-prosjektering. Appfarm er en norsk plattform for produksjonsklare webapplikasjoner uten kode (kunder bl.a. Skanska, ABB, Tide).",
+  },
+];
+
+const panel = [
+  {
+    navn: "Kari Engensbakken Bjørkelund",
+    rolle: "Leder paneldebatten · Senior rådgiver, AdviseTech AS",
+    bio: "Ansvar for AI som forretning i AdviseTech. Teknolog med lang erfaring med å lede utviklerteam som utvikler og forvalter langsiktige, sikre og stabile løsninger i samfunnskritiske og regulerte bransjer som farmasi og finans.",
   },
 ];
 
@@ -79,6 +90,7 @@ const eventJsonLd = {
     { "@type": "Person", name: "Steinar Hansen" },
     { "@type": "Person", name: "Stephan Brostrøm" },
     { "@type": "Person", name: "Øystein Bjering" },
+    { "@type": "Person", name: "Kari Engensbakken Bjørkelund" },
   ],
   offers: {
     "@type": "Offer",
@@ -182,7 +194,7 @@ export function ArrangementSection() {
             </ol>
           </div>
 
-          {/* Innledere */}
+          {/* Innledere + Paneldebatt */}
           <div>
             <h4 className="text-lg font-semibold">Innledere</h4>
             <ul className="mt-4 space-y-5">
@@ -191,6 +203,17 @@ export function ArrangementSection() {
                   <p className="font-semibold text-gray-900">{i.navn}</p>
                   <p className="text-sm text-gray-600">{i.rolle}</p>
                   <p className="mt-1 text-sm text-gray-700">{i.bio}</p>
+                </li>
+              ))}
+            </ul>
+
+            <h4 className="mt-8 text-lg font-semibold">Paneldebatt</h4>
+            <ul className="mt-4 space-y-5">
+              {panel.map((p) => (
+                <li key={p.navn}>
+                  <p className="font-semibold text-gray-900">{p.navn}</p>
+                  <p className="text-sm text-gray-600">{p.rolle}</p>
+                  <p className="mt-1 text-sm text-gray-700">{p.bio}</p>
                 </li>
               ))}
             </ul>
